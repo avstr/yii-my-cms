@@ -1,0 +1,16 @@
+#add_page{
+    margin-left: 10px;
+}
+div.form #Page_type label{
+    display:inline;
+}
+.row_label{
+     width: 200px;
+     float: left;
+ }
+.row_content{
+    float: left;
+}
+.row{
+    clear: both;
+}
