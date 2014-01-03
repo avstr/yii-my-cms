@@ -24,6 +24,37 @@
             <?php echo $form->error($model,'pid'); ?>
         </div>
     </div>
+    <div class="row">
+        <div class="row_label">
+            <?php echo $form->labelEx($model,'prev_id'); ?>
+        </div>
+        <div class="row_content">
+            <select id="Page_prev_id" name="Page[prev_id]">
+                <?php
+                    $criteria = new CDbCriteria;
+                    $criteria->select = "id, title";
+                    $criteria->condition = "pid='{$model->pid}'";
+                    $criteria->order = "position";
+                    $page_levels = Page::model()->findAll($criteria);
+                    array_unshift($page_levels, array("id"=>0, "title"=>"Начало"));
+                    $page_levels[] = array();
+                    $prev_page = array();
+                    foreach((array)$page_levels as $page_level){
+                        $add_str = '';
+                        if($prev_page["id"]==$model->id && !$model->isNewRecord){
+                            $add_str = "disabled";
+                        }elseif(!empty($page_level) && $page_level["id"]==$model->id && !$model->isNewRecord){
+                            $add_str = "selected";
+                        }
+                        if(!empty($prev_page)){
+                            echo "<option value='{$prev_page['id']}' {$add_str}>{$prev_page['title']}</option>";
+                        }
+                        $prev_page = $page_level;
+                    }
+                ?>
+            </select>
+        </div>
+    </div>
 
     <div class="row">
         <div class="row_label">
@@ -132,3 +163,7 @@
     <?php $this->endWidget(); ?>
 
 </div><!-- form -->
+
+<script>
+    var curId = <?php if($model->id > 0)echo $model->id; else echo 'undefined';?>
+</script>

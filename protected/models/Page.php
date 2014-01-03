@@ -24,11 +24,14 @@ class Page extends CActiveRecord
 	/**
 	 * @return string the associated database table name
 	 */
-
+    public $prev_id;
     static $active_id;
     static $active_parents = array();
     static $items = array();
     static $list = array();
+    static $allVisiblePageById = array();
+    static $allVisiblePageByAlias = array();
+    static $callBeforeSave = true;
 
 	public function tableName()
 	{
@@ -46,8 +49,8 @@ class Page extends CActiveRecord
 			array('pid, type, alias, title', 'required'),
             array('alias', 'unique'),
             array('alias', 'match', 'pattern' => "/^[a-zA-Z0-9\-]+$/u", 'message' => "Допустимые символы a-zA-Z0-9-"),
-            array('URL', 'match', 'pattern' => "/^[a-zA-Z0-9\-\/]+$/u", 'message' => "Допустимые символы a-zA-Z0-9-/"),
-			array('pid', 'numerical', 'integerOnly'=>true),
+            array('URL', 'match', 'pattern' => "/^[a-zA-Z0-9\-\/\?=]+$/u", 'message' => "Допустимые символы a-zA-Z0-9-/"),
+			array('pid, position', 'numerical', 'integerOnly'=>true),
 			array('parents, alias, title, meta_t, meta_d, meta_k, URL', 'length', 'max'=>255),
 			array('type', 'length', 'max'=>6),
 			array('hidden', 'length', 'max'=>3),
@@ -85,6 +88,7 @@ class Page extends CActiveRecord
 			'meta_k' => 'Meta слова',
 			'description' => 'Описание страницы',
 			'URL' => 'Url',
+            'prev_id'   => "Сортировка",
 			'content' => 'Содержание',
 		);
 	}
@@ -138,19 +142,29 @@ class Page extends CActiveRecord
 		return parent::model($className);
 	}
 
-    /** Возвращает меню страниц для админа
+    /** Возвращает меню страниц
      *
      * @param active page id
+     * @param mode {admin, front}
      *@return Array pages
      */
-    public static function menuAdmin($active_id = 0){
+    public static function menu($mode = "admin", $active_id = 0){
         if(!empty(self::$items)){
             return self::$items;
         }
-        self::$active_id = $active_id;
-        $pages = Yii::app()->db->createCommand()->select('id, pid, title')->from("{{page}}")->order("level")->queryAll();
+        if(empty(self::$active_id)){
+            self::$active_id = $active_id;
+        }
+        $criteria = new CDbCriteria;
+        $criteria->select = 'id, pid, title, parents, level';
+        $criteria->order = "level, position";
+        if($mode == "front"){
+            $criteria->condition = "hidden = 'no'";
+        }
+        $pages=self::model()->findAll($criteria);
+       // $pages = Yii::app()->db->createCommand()->select('id, pid, title')->from("{{page}}")->order("level")->queryAll();
         //получаем всех родителей активной страницы
-        $active_page = self::model()->findByPk($active_id);
+        $active_page = self::model()->findByPk(self::$active_id);
         if(!empty($active_page)){
             self::$active_parents = explode('/', $active_page->parents);
         }
@@ -159,11 +173,11 @@ class Page extends CActiveRecord
         $itemsIndex = array();
         foreach($pages as $page){
             if($page['pid'] == 0) {
-                $items[$page['id']] = self::itemMenuAdmin($page);
+                $items[$page['id']] = self::itemMenu($page, $mode);
                 $items[$page['id']]['items'] = array();
                 $itemsIndex[$page['id']] = &$items[$page['id']];
             } else {
-                $itemsIndex[$page['pid']]['items'][$page['id']] = self::itemMenuAdmin($page);
+                $itemsIndex[$page['pid']]['items'][$page['id']] = self::itemMenu($page, $mode);
                 $itemsIndex[$page['id']] = &$itemsIndex[$page['pid']]['items'][$page['id']];
             }
         }
@@ -172,33 +186,39 @@ class Page extends CActiveRecord
         return self::$items;
     }
 
-    /** Возвращает элемент массива меню страниц для админа
+    /** Возвращает элемент массива меню страниц
      *
      *@return Array
      */
-    public static function itemMenuAdmin($page){
+    public static function itemMenu($page, $mode='admin'){
         $item = array(
             'label'         => $page['title'],
-            'url'           => array('/admin/page/update', 'id' => $page['id']),
+            'url'           => ($mode == "admin") ? array('/admin/page/update', 'id' => $page['id']) : Yii::app()->createAbsoluteUrl("page/index", array('id' => $page["id"])),
             'itemOptions'   => array('id' => $page['id']),
         );
-        if(self::$active_id == $page['id']){
-            $item['active'] = true;
+        if($mode == "admin"){
+            if(self::$active_id == $page['id']){
+                $item['active'] = true;
+            }
+            if(!in_array($page['id'], self::$active_parents)){
+                $item['itemOptions']['class'] = 'closed';
+            }
+        }else{
+            $item['itemOptions']['class'] = ($page['level'] > 1) ? "menu-level-more-1" : "menu-level-1";
         }
-        if(!in_array($page['id'], self::$active_parents)){
-            $item['itemOptions']['class'] = 'closed';
-        }
-
         return $item;
     }
+
+
+
+
 
     public static function itemList($active_id = 0){
         self::$active_id = $active_id;
         if(!empty(self::$list)){
             return self::$list;
         }
-
-        $pages = self::menuAdmin($_GET['id']);
+        $pages = self::menu("admin", $_GET['id']);
 
         self::$list[0] = 'root';
         self::formingList($pages);
@@ -222,21 +242,25 @@ class Page extends CActiveRecord
     }
 
     public function beforeSave(){
+        if(!self::$callBeforeSave){
+            return parent::beforeSave();
+        }
         //получаем
         //заполняем поле parents
         $parent = NULL;
         if($this->pid > 0){
             $parent = self::model()->findByPk($this->pid);
         }
-        if($this->isNewRecord){
+        /*if($this->isNewRecord){
             $this->position = $this->calculateMaxPosition($this->pid);
             $this->level = (empty($parent)) ? 1 : $parent->level + 1;
             $this->parents = (empty($parent)) ? "/" : $parent->parents .$this->pid . "/";
         }else{
-             self::preparePageLevel($this->id, $parent);
-        }
 
+        }*/
+        self::preparePageLevel($this->id, $parent, $this->prev_id);
         //в зависимости от типа страницы оставляем или URL или content
+       // echo "<pre>"; print_r($this); echo "</pre>";
         switch($this->type){
             case 'sratic':
                 $this->URL = "";
@@ -259,28 +283,44 @@ class Page extends CActiveRecord
      * @param mixed(int, object)
      * @return boolen
      */
-    public function preparePageLevel($id, $parent){
-        $page = self::model()->findByPk($id);
+    public function preparePageLevel($id, $parent, $prev_id){
         if(is_numeric($parent)){
             $parent = ($parent > 0) ? self::model()->findByPk($parent) : NULL;
         }
-        //страница не была пересена
-        if($parent->id == $page->pid){
-            return true;
+        $parent_id = ($parent > 0) ? $parent->id : 0;
+        if($prev_id == 0){
+            $this->position = 1;
+        }else{
+            //получаем предыдущую страницу
+            $criteria = new CDbCriteria;
+            $criteria->select = "id, position";
+            $criteria->condition = "id = :id";
+            $criteria->params = array(":id" => $prev_id);
+            $prev_page = self::model()->find($criteria);
+            $this->position = $prev_page->position + 1;
         }
-        $this->position = $this->calculateMaxPosition((int)$parent->id);
-
+        //обновляем позиции страниц текущего уровня
+        $sql = "UPDATE {{page}} SET position = position+1 WHERE pid={$parent_id} AND position >= {$this->position}";
+        Yii::app()->db->createCommand($sql)->execute();
+        $this->level = (empty($parent)) ? 1 : $parent->level + 1;
         //подготавливаем данные для обновления
         $this->parents = (empty($parent)) ? '/' : "{$parent->parents}{$parent->id}/";
-        $this->level = (empty($parent)) ? 1 : $parent->level + 1;
+        //страница не была пересена
+        if(!$this->isNewRecord){
+            $page = self::model()->findByPk($id);
+            if($parent_id == $page->pid){
+                return true;
+            }
 
-        //обновляем потомков
-        $diffLevel = $page->level - $this->level;
-        $oldParentsForChilddren = "{$page->parents}{$id}/";
-        $newParentsForChilddren = "{$this->parents}{$id}/";
-       // echo $oldParentsForChilddren . "___" . $newParentsForChilddren; exit();
-        $sql = "UPDATE {{page}} SET level=level-{$diffLevel}, parents=REPLACE(parents, '{$oldParentsForChilddren}', '{$newParentsForChilddren}') WHERE parents LIKE '%{$oldParentsForChilddren}%'";
-        return Yii::app()->db->createCommand($sql)->execute();
+            //обновляем потомков
+            $diffLevel = $page->level - $this->level;
+            $oldParentsForChilddren = "{$page->parents}{$id}/";
+            $newParentsForChilddren = "{$this->parents}{$id}/";
+            //echo $oldParentsForChilddren . "___" . $newParentsForChilddren; exit();
+            $sql = "UPDATE {{page}} SET level=level-{$diffLevel}, parents=REPLACE(parents, '{$oldParentsForChilddren}', '{$newParentsForChilddren}') WHERE parents LIKE '%{$oldParentsForChilddren}%'";
+            return Yii::app()->db->createCommand($sql)->execute();
+        }
+
      }
 
     /** расчет максимальной позиции
@@ -291,5 +331,42 @@ class Page extends CActiveRecord
     public function calculateMaxPosition($pid){
         $maxPosition = self::model()->findBySql("SELECT MAX(position) as position FROM {{page}} WHERE pid=:pid", array(":pid" => $pid));
         return ($maxPosition->position >= 0) ? $maxPosition->position + 1 : 1;
+    }
+
+    /** перемещаем страницу
+     *
+     * @param array("id", "prev_id", "parent_id")
+     * @param array()
+     * @return bool
+     */
+    public function move($params, &$errors){
+
+        if(!isset($params["prev_id"])){
+            $errors["prev_id"] = "Не передан prev_id страницы";
+        }
+        if(!isset($params["parent_id"])){
+            $errors["parent_id"] = "Не передан parent_id страницы";
+        }
+        if(empty($errors)){
+            self::$callBeforeSave = false;
+            $this->preparePageLevel($params["id"], $params["parent_id"], $params["prev_id"]);
+        }
+        return (empty($errors)) ? true : false;
+    }
+
+    public static function getAllVisiblePage(&$pageByAlias, &$pageById){
+        if(empty(self::$allVisiblePageById)){
+            $criteria = new CDbCriteria;
+            $criteria->select = "id, alias, parents, URL, type";
+            $criteria->condition = "hidden='no'";
+            $pages = self::model()->findAll($criteria);
+            foreach($pages as $page){
+                self::$allVisiblePageByAlias[$page["alias"]] = $page;
+                self::$allVisiblePageById[$page["id"]] = $page;
+            }
+
+        }
+        $pageByAlias = self::$allVisiblePageByAlias;
+        $pageById = self::$allVisiblePageById;
     }
 }

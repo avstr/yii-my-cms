@@ -53,6 +53,8 @@ Yii::app()->getClientScript()->registerScriptFile('/js/admin.js' );
 			'items'=>array(
 				array('label'=>'Страницы', 'url'=>array('/admin/page')),
 				array('label'=>'Пользователи', 'url'=>array('/admin/user')),
+                array('label'=>'Настройки', 'url'=>array('/admin/setting')),
+                array('label'=>'Новости', 'url'=>array('/admin/news')),
 				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
 				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
 			),

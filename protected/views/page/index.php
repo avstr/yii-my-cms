@@ -1,7 +1,7 @@
 <?php
 /* @var $this SiteController */
 
-$this->pageTitle=$model->title;
+$this->pageTitle=$model->meta_t;
 ?>
 
 <?php

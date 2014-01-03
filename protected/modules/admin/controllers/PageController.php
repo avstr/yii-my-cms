@@ -16,7 +16,7 @@ class PageController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('index', 'create', 'update', 'delete'),
+                'actions'=>array('index', 'create', 'update', 'delete', 'move', 'getchildren'),
                 'roles'=>array('admin'),
             ),
             array("deny",
@@ -49,6 +49,7 @@ class PageController extends Controller
         if(isset($_POST['Page']))
         {
             $model->attributes=$_POST['Page'];
+            $model->prev_id = $_POST["Page"]["prev_id"];
             if($model->save())
                 $this->redirect(array('index','id'=>$model->id));
         }
@@ -69,6 +70,7 @@ class PageController extends Controller
         {
 
             $model->attributes=$_POST['Page'];
+            $model->prev_id = $_POST["Page"]["prev_id"];
             if($model->save())
                 $this->redirect(array('index','id'=>$model->id));
         }
@@ -85,6 +87,53 @@ class PageController extends Controller
         $this->redirect(array('index'));
 
     }
+
+    public function actionGetchildren($pid){//работает через ajax (необходима для определения положения страницы)
+        $criteria = new  CDbCriteria;
+        $criteria->select = "id, title";
+        $criteria->condition = "pid={$pid}";
+        $criteria->order = "position";
+        $pages = Page::model()->findAll($criteria);
+        $pages_array = array();
+        foreach($pages as $page){
+            $pages_array[$page->id] = array(
+                "id" => $page->id,
+                "title" => $page->title
+            );
+        }
+        //необходимо для обработки в js
+        array_unshift($pages_array, array("id"=>0, "title"=>"Начало"));
+        $pages_array[] = array();
+        //print_r($pages_array);
+        echo json_encode($pages_array);
+        exit;
+    }
+
+    /*public function actionMove(){
+        $errors = array();
+        $model=Page::model()->findByPk((int)$_POST["id"]);
+        if($model === null){
+            $errors["id"] = "Нет записи с id={$_POST['id']}";
+        }
+        if(empty($errors)){
+            $model->move($_POST, $errors);
+        }
+        if(empty($errors)){
+            $model->pid = (int)$_POST["parent_id"];
+            if(!$model->save()){
+                $errors["save"] = "Не удалось перенести модуль";
+            }
+        }
+        $result = array();
+        if(empty($errors)){
+            $result["result"] = "OK";
+        }else{
+            $result["result"] = "error";
+            $result["errors"] = $errors;
+        }
+        echo json_encode($result);
+        exit;
+    }*/
 
     public function loadModel($id)
     {

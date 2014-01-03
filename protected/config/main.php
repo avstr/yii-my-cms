@@ -33,6 +33,7 @@ return array(
 
 	// application components
 	'components'=>array(
+        'ih'=>array('class'=>'CImageHandler'),
         'authManager' => array(
             // Будем использовать свой менеджер авторизации
             'class' => 'PhpAuthManager',
@@ -61,6 +62,11 @@ return array(
                     'baseUrl' => 'jquery',
                     'js' => array('jquery.cookie.js'),
                     'depends' => array('jquery'),
+                ),
+                'ui' => array(
+                    'baseUrl' => 'jquery',
+                    'js' => array('jquery-ui-1.9.2.custom.min.js'),
+                    'depends' => array('jquery'),
                 )
             )
         ),
@@ -72,6 +78,7 @@ return array(
 
 		'urlManager'=>array(
 			'urlFormat'=>'path',
+            'showScriptName'=>false,
 			'rules'=>array(
 				/*'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
@@ -80,6 +87,7 @@ return array(
                     'class' => 'application.components.PageUrlRule',
                     'connectionID' => 'db',
                 ),
+
 			),
 		),
 		/*'db'=>array(
@@ -94,27 +102,27 @@ return array(
 			'password' => '',
             'tablePrefix' => "cms_",
 			'charset' => 'utf8',
+            'enableProfiling' => true,
+            'enableParamLogging' => true,
 		),
 
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors
 			'errorAction'=>'site/error',
 		),
-		'log'=>array(
-			'class'=>'CLogRouter',
-			'routes'=>array(
-				array(
-					'class'=>'CFileLogRoute',
-					'levels'=>'error, warning',
-				),
-				// uncomment the following to show log messages on web pages
-				/*
-				array(
-					'class'=>'CWebLogRoute',
-				),
-				*/
-			),
-		),
+        'log' => array(
+            'class' => 'CLogRouter',
+            'routes' => array(
+                array(
+                    'class' => 'CFileLogRoute',
+                    'levels' => 'error, warning',
+                ),
+                array(
+                    'class' => 'ext.yii-debug-toolbar.YiiDebugToolbarRoute',
+                    'ipFilters'=>array('127.0.0.1'),
+                ),
+            ),
+        ),
 	),
 
 	// application-level parameters that can be accessed

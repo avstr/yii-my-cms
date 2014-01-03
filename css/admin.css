@@ -14,3 +14,17 @@ div.form #Page_type label{
 .row{
     clear: both;
 }
+.material_img
+{
+    margin: 10px 10px 10px 0;
+    float:left
+}
+div.view
+{
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #C9E0ED;
+    min-height: 250px;
+    height: auto !important;
+    height: 250px;
+}
