@@ -2,6 +2,7 @@
 /* @var $this NewsController */
 /* @var $data News */
 ?>
+Новости
 
 <div class="view">
 
