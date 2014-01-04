@@ -22,12 +22,7 @@ $('.search-form form').submit(function(){
 
 <h1>Журнал новостей</h1>
 
-<p>
-You may optionally enter a comparison operator (<b>&lt;</b>, <b>&lt;=</b>, <b>&gt;</b>, <b>&gt;=</b>, <b>&lt;&gt;</b>
-or <b>=</b>) at the beginning of each of your search values to specify how the comparison should be done.
-</p>
-
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
+<?php echo CHtml::link('Расширенный поиск','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
@@ -39,7 +34,13 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
 	'dataProvider'=>$model->search(),
 	'filter'=>$model,
 	'columns'=>array(
-		'id',
+        array(
+            'name' => 'id',
+            'header' => 'ID',
+            'headerHtmlOptions' => array(
+                'width' => '30px',
+            ),
+        ),
 		array(
             'name' => 'date',
             'header' => 'Дата',
@@ -47,7 +48,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
         ),
 		'title',
 		'shorh_desc',
-		'description',
+        array(
+            'name'=>'description',
+            'header' => 'Описание',
+            'filter' => '',
+            'value' => '$data->description',
+        ),
 		array(
             'name' => 'picture',
             'header' => 'Изображение',
@@ -58,6 +64,12 @@ or <b>=</b>) at the beginning of each of your search values to specify how the c
             'type' => 'raw',
             'value' => '(!empty($data->picture) && file_exists($_SERVER["DOCUMENT_ROOT"].Yii::app()->urlManager->baseUrl."/images/news/".substr($data->date, 0, 4)."/small/".$data->picture)) ?  CHtml::image("/images/news/".substr($data->date, 0, 4)."/small/".$data->picture, "", array("width" => "30", "height" => "30")) : "-"',
 
+        ),
+        'hidden' => array(
+            'name'      => 'hidden',
+            'header' => 'Скрыто',
+            'value'     => '($data->hidden == "yes") ? "да" : "нет"',
+            'filter'    => array("no" => "нет", "yes" => "да"),
         ),
 		array(
 			'class'=>'CButtonColumn',

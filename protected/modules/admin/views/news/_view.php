@@ -22,8 +22,12 @@ gfgfdgsdf
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('description')); ?>:</b>
-	<?php echo CHtml::encode($data->description); ?>
+	<?php echo $data->description; ?>
 	<br />
+
+    <b><?php echo CHtml::encode($data->getAttributeLabel('hidden')); ?>:</b>
+    <?php echo ($data->hidden == "yes") ? "да" : "нет"; ?>
+    <br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('picture')); ?>:</b>
     <?php echo $this->material_image($data->id, substr($data->create_time, 0, 4), $data->picture, $data->title, '150','small_img left');?>

@@ -41,10 +41,11 @@ class News extends CActiveRecord
                 'tooLarge'=>'Файл весит больше 5 MB. Пожалуйста, загрузите файл меньшего размера.',
             ),
 			array('title, image', 'length', 'max'=>255),
+            array('hidden', 'length', 'max'=>3),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			//array('id, date, title, shorh_desc, description', 'safe', 'on'=>'search'),
-            array('id, date, title, shorh_desc, description, picture', 'safe'),
+			//array('id, date, title, shorh_desc, description, hidden', 'safe', 'on'=>'search'),
+            array('id, date, title, shorh_desc, description, picture, hidden', 'safe'),
 		);
 	}
 
@@ -72,6 +73,7 @@ class News extends CActiveRecord
 			'description' => 'Описание',
             'image' => 'Картинка к новости',
             'del_img'=>'Удалить картинку?',
+            'hidden' => 'Скрыто',
 		);
 	}
 
@@ -97,7 +99,7 @@ class News extends CActiveRecord
 		$criteria->compare('date',$this->date,true);
 		$criteria->compare('title',$this->title,true);
 		$criteria->compare('shorh_desc',$this->shorh_desc,true);
-		$criteria->compare('description',$this->description,true);
+        $criteria->compare('hidden',$this->hidden,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -130,5 +132,13 @@ class News extends CActiveRecord
                     'width'=>$width,
                     'class'=>$class
                 ));
+    }
+
+    public function beforeSave(){
+        //определяем hidden
+        if($this->hidden != "yes"){
+            $this->hidden = "no";
+        }
+        return parent::beforeSave();
     }
 }

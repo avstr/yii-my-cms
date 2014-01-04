@@ -22,6 +22,10 @@ $this->menu=array(
 		'shorh_desc',
 		'description',
         array(
+            'name' => 'Скрыто',
+            'value' => ($model->hidden == 'yes') ? 'да' : 'нет',
+        ),
+        array(
             'name' => 'Изображение',
             //'type'=>'image',
             //'value' => '(!empty($data->picture) && file_exists($_SERVER["DOCUMENT_ROOT"].Yii::app()->urlManager->baseUrl."/images/news/".substr($data->date, 0, 4)."/small/".$data->picture)) ?  "/images/news/".substr($data->date, 0, 4)."/small/".$data->picture : "-"',

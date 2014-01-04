@@ -32,13 +32,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'description'); ?>
-		<?php echo $form->textArea($model,'description',array('rows'=>6, 'cols'=>50)); ?>
-	</div>
-
-	<div class="row">
-		<?php echo $form->label($model,'picture'); ?>
-		<?php echo $form->textField($model,'picture',array('size'=>60,'maxlength'=>255)); ?>
+		<?php echo $form->label($model,'hidden'); ?>
+		<?php echo $form->dropDownList($model,'hidden',array(""=>"",'yes'=>"да", "no"=>"нет")); ?>
 	</div>
 
 	<div class="row buttons">

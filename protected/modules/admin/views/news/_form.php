@@ -52,6 +52,12 @@
 		<?php echo $form->error($model,'description'); ?>
 	</div>
 
+    <div class="row">
+        <?php echo $form->labelEx($model,'hidden'); ?>
+        <?php echo $form->checkBox($model,'hidden', array("uncheckedValue"=>"no", "checkedValue"=>"yes", "value"=>"yes")); ?>
+        <?php echo $form->error($model,'hidden'); ?>
+    </div>
+
 	<div class="row">
         <?php echo $form->labelEx($model,'image'); ?>
         <?php // Вывод уже загруженной картинки или изображения No_photo
