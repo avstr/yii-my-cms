@@ -5677,3 +5677,88 @@ REQUEST_URI=/assets/29359100/contents.css
 2014/01/03 23:21:53 [warning] [application] Не удалось присвоить небезопасный атрибут "image" класса "News".
 in Z:\home\yii-my-cms\www\protected\modules\admin\controllers\NewsController.php (126)
 in Z:\home\yii-my-cms\www\index.php (13)
+2014/01/04 16:30:21 [error] [exception.CException] exception 'CException' with message 'Контроллер ResponseController не может найти представление "index".' in Z:\home\yii-my-cms\www\framework\web\CController.php:878
+Stack trace:
+#0 Z:\home\yii-my-cms\www\framework\web\CController.php(782): CController->renderPartial('index', Array, true)
+#1 Z:\home\yii-my-cms\www\protected\modules\admin\controllers\ResponseController.php(128): CController->render('index', Array)
+#2 Z:\home\yii-my-cms\www\framework\web\actions\CInlineAction.php(49): ResponseController->actionIndex()
+#3 Z:\home\yii-my-cms\www\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#4 Z:\home\yii-my-cms\www\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#5 Z:\home\yii-my-cms\www\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#6 Z:\home\yii-my-cms\www\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#7 Z:\home\yii-my-cms\www\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#8 Z:\home\yii-my-cms\www\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#9 Z:\home\yii-my-cms\www\framework\web\CController.php(291): CFilterChain->run()
+#10 Z:\home\yii-my-cms\www\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#11 Z:\home\yii-my-cms\www\framework\web\CWebApplication.php(282): CController->run('')
+#12 Z:\home\yii-my-cms\www\framework\web\CWebApplication.php(141): CWebApplication->runController('admin/response')
+#13 Z:\home\yii-my-cms\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#14 Z:\home\yii-my-cms\www\index.php(13): CApplication->run()
+#15 {main}
+REQUEST_URI=/admin/response
+HTTP_REFERER=http://yii-my-cms/gii/crud/index
+---
+2014/01/04 17:02:01 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "assets/29359100/contents.css".' in Z:\home\yii-my-cms\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\home\yii-my-cms\www\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/29359100...')
+#1 Z:\home\yii-my-cms\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\home\yii-my-cms\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/assets/29359100/contents.css
+---
+2014/01/04 17:03:02 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "assets/29359100/contents.css".' in Z:\home\yii-my-cms\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\home\yii-my-cms\www\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/29359100...')
+#1 Z:\home\yii-my-cms\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\home\yii-my-cms\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/assets/29359100/contents.css
+---
+2014/01/04 17:06:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "assets/29359100/contents.css".' in Z:\home\yii-my-cms\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\home\yii-my-cms\www\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/29359100...')
+#1 Z:\home\yii-my-cms\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\home\yii-my-cms\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/assets/29359100/contents.css
+---
+2014/01/04 17:10:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "assets/29359100/contents.css".' in Z:\home\yii-my-cms\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\home\yii-my-cms\www\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/29359100...')
+#1 Z:\home\yii-my-cms\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\home\yii-my-cms\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/assets/29359100/contents.css
+---
+2014/01/04 17:11:17 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "assets/29359100/contents.css".' in Z:\home\yii-my-cms\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\home\yii-my-cms\www\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/29359100...')
+#1 Z:\home\yii-my-cms\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\home\yii-my-cms\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/assets/29359100/contents.css
+---
+2014/01/04 17:12:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "assets/29359100/contents.css".' in Z:\home\yii-my-cms\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\home\yii-my-cms\www\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/29359100...')
+#1 Z:\home\yii-my-cms\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\home\yii-my-cms\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/assets/29359100/contents.css
+---
+2014/01/04 17:12:41 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "assets/29359100/contents.css".' in Z:\home\yii-my-cms\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\home\yii-my-cms\www\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/29359100...')
+#1 Z:\home\yii-my-cms\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\home\yii-my-cms\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/assets/29359100/contents.css
+---
+2014/01/04 17:19:48 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "assets/29359100/contents.css".' in Z:\home\yii-my-cms\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\home\yii-my-cms\www\framework\web\CWebApplication.php(141): CWebApplication->runController('assets/29359100...')
+#1 Z:\home\yii-my-cms\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\home\yii-my-cms\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/assets/29359100/contents.css
+---
