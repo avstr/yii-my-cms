@@ -66,7 +66,10 @@
             $criteria = new CDbCriteria();
             $criteria->condition = "hidden='no'";
             $criteria->order = "date DESC";
-            $dataProvider=new CActiveDataProvider('News');
+            $dataProvider=new CActiveDataProvider('News', array(
+                'pagination'=>array(
+                    'pageSize'=>4,
+                )));
             $dataProvider->setCriteria($criteria);
             $this->render('index',array(
                 'dataProvider'=>$dataProvider,

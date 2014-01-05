@@ -2,11 +2,22 @@
 class PageUrlRule extends CBaseUrlRule
 {
     public $connectionID = 'db';
+    private $prefix_cache = "page_";
     static $breadCrumbs = array();
 
 
     public function createUrl($manager,$route,$params,$ampersand)
     {
+        //кеширование md5($route . serialize($params)), $params отсортировны
+        //вместо false пишем 0
+        //сформируем ключ для cache
+        $urlPath = '';
+        ksort($params);
+        $key_cache = $this->prefix_cache . md5($route . serialize($params));
+        $value_cache = Yii::app()->cache->get($key_cache);
+        if($value_cache !== false){
+            return ($value_cache === '0') ? false : $value_cache;
+        }
         $getStr = '';
         $getArrayStr = array();
         if(!empty($params)){
@@ -27,54 +38,63 @@ class PageUrlRule extends CBaseUrlRule
             }
             //echo "<pre>"; print_r($page); echo "</pre>";
             if(empty($page)){
-                return false;
+                $urlPath = '0';
             }
-
-            //находим всех родителей текущей страницы
-            if($page->parents == "/"){
-                return $page->alias;
-            }else{
-                $urlPath = $this->getPathAlias($page->parents);
-                if(empty($urlPath)){
-                    return false;
+            if($urlPath != ''){
+                //находим всех родителей текущей страницы
+                if($page->parents == "/"){
+                    Yii::app()->cache->set($key_cache, $page->alias);
+                    $urlPath = $page->alias;
+                }else{
+                    $urlPath = $this->getPathAlias($page->parents);
+                    if(empty($urlPath)){
+                        $urlPath = '0';
+                    }
+                    $urlPath = "{$urlPath}/{$page['alias']}";
                 }
-                $urlPath = "{$urlPath}/{$page['alias']}";
-
-                return $urlPath;
             }
         }
-        //ищем нужный модуль с action
-        $criteria = new CDbCriteria;
-        $criteria->select = "URL, parents";
-        $criteria->condition = "hidden='no' AND URL='{$route}'";
-        $page=Page::model()->find($criteria);
-        if(!empty($page)){
-            $urlPath = $this->getPathAlias($page->parents);
-            if(is_bool($urlPath) && $urlPath == false){
-                return false;
+        if($urlPath != ''){
+            //ищем нужный модуль с action
+            $criteria = new CDbCriteria;
+            $criteria->select = "URL, parents";
+            $criteria->condition = "hidden='no' AND URL='{$route}'";
+            $page=Page::model()->find($criteria);
+            if(!empty($page)){
+                $urlPath = $this->getPathAlias($page->parents);
+                if(is_bool($urlPath) && $urlPath == false){
+                    $urlPath = '0';
+                }
+                if($urlPath != ''){
+                    //echo "{$route}<pre>"; print_r($params); echo "</pre>";
+                    $urlPath = ($urlPath == '') ? $route . $getStr : "{$urlPath}/{$route}" . $getStr;
+                }
             }
-            //echo "{$route}<pre>"; print_r($params); echo "</pre>";
-            return ($urlPath == '') ? $route . $getStr : "{$urlPath}/{$route}" . $getStr;
         }
 
-        //ищем путь к модулю, если в базе нет module/action
-        $routeParts = explode("/", $route);
+        if($urlPath != ''){
+            //ищем путь к модулю, если в базе нет module/action
+            $routeParts = explode("/", $route);
 
-        $moduleName = $routeParts[0];
-        $criteria->condition = "hidden='no' AND URL LIKE '{$moduleName}%'";
+            $moduleName = $routeParts[0];
+            $criteria->condition = "hidden='no' AND URL LIKE '{$moduleName}%'";
 
-        $page=Page::model()->find($criteria);
+            $page=Page::model()->find($criteria);
 
- //       echo "<pre>"; print_r($page); echo "</pre>";
-        if(!empty($page)){
-            $urlPath = $this->getPathAlias($page->parents);
-            if(is_bool($urlPath) && $urlPath == false){
-                return false;
+            //       echo "<pre>"; print_r($page); echo "</pre>";
+            if(!empty($page)){
+                $urlPath = $this->getPathAlias($page->parents);
+                if(is_bool($urlPath) && $urlPath == false){
+                    $urlPath = '0';
+                }
+                if($urlPath != ''){
+                    $urlPath = ($urlPath == '') ? $route.$getStr : "{$urlPath}/{$route}".$getStr;
+                }
             }
-
-            return ($urlPath == '') ? $route.$getStr : "{$urlPath}/{$route}".$getStr;
         }
-        return false;//не применяем данное правило
+        $urlPath = ($urlPath != '') ? $urlPath : '0';
+        Yii::app()->cache->set($key_cache, $urlPath);
+        return ($urlPath === '0') ? false : $urlPath;
     }
 
     public function parseUrl($manager,$request,$pathInfo,$rawPathInfo)

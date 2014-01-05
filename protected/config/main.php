@@ -33,6 +33,10 @@ return array(
 
 	// application components
 	'components'=>array(
+        'cache'=>array(
+            'class' => 'system.caching.CFileCache',
+            'cachePath' => 'protected/runtime/filecache',
+        ),
         'ih'=>array('class'=>'CImageHandler'),
         'authManager' => array(
             // Будем использовать свой менеджер авторизации
