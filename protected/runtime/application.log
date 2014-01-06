@@ -5770,3 +5770,68 @@ Stack trace:
 #3 {main}
 REQUEST_URI=/favicon.ico
 ---
+2014/01/06 19:25:29 [error] [exception.CException] exception 'CException' with message 'Не определено свойство "CActiveForm.achion".' in Z:\home\yii-my-cms\www\framework\base\CComponent.php:173
+Stack trace:
+#0 Z:\home\yii-my-cms\www\framework\web\CWidgetFactory.php(161): CComponent->__set('achion', 'clear_cache')
+#1 Z:\home\yii-my-cms\www\framework\web\CBaseController.php(146): CWidgetFactory->createWidget(Object(SettingController), 'CActiveForm', Array)
+#2 Z:\home\yii-my-cms\www\framework\web\CBaseController.php(189): CBaseController->createWidget('CActiveForm', Array)
+#3 Z:\home\yii-my-cms\www\protected\modules\admin\views\setting\index.php(61): CBaseController->beginWidget('CActiveForm', Array)
+#4 Z:\home\yii-my-cms\www\framework\web\CBaseController.php(126): require('Z:\home\yii-my-...')
+#5 Z:\home\yii-my-cms\www\protected\extensions\yii-debug-toolbar\components\YiiDebugViewRenderer.php(47): CBaseController->renderInternal('Z:\home\yii-my-...', Array, true)
+#6 Z:\home\yii-my-cms\www\framework\web\CBaseController.php(93): YiiDebugViewRenderer->renderFile(Object(SettingController), 'Z:\home\yii-my-...', Array, true)
+#7 Z:\home\yii-my-cms\www\framework\web\CController.php(869): CBaseController->renderFile('Z:\home\yii-my-...', Array, true)
+#8 Z:\home\yii-my-cms\www\framework\web\CController.php(782): CController->renderPartial('index', Array, true)
+#9 Z:\home\yii-my-cms\www\protected\modules\admin\controllers\SettingController.php(45): CController->render('index', Array)
+#10 Z:\home\yii-my-cms\www\framework\web\actions\CInlineAction.php(49): SettingController->actionIndex()
+#11 Z:\home\yii-my-cms\www\framework\web\CController.php(308): CInlineAction->runWithParams(Array)
+#12 Z:\home\yii-my-cms\www\framework\web\filters\CFilterChain.php(133): CController->runAction(Object(CInlineAction))
+#13 Z:\home\yii-my-cms\www\framework\web\filters\CFilter.php(40): CFilterChain->run()
+#14 Z:\home\yii-my-cms\www\framework\web\CController.php(1145): CFilter->filter(Object(CFilterChain))
+#15 Z:\home\yii-my-cms\www\framework\web\filters\CInlineFilter.php(58): CController->filterAccessControl(Object(CFilterChain))
+#16 Z:\home\yii-my-cms\www\framework\web\filters\CFilterChain.php(130): CInlineFilter->filter(Object(CFilterChain))
+#17 Z:\home\yii-my-cms\www\framework\web\CController.php(291): CFilterChain->run()
+#18 Z:\home\yii-my-cms\www\framework\web\CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#19 Z:\home\yii-my-cms\www\framework\web\CWebApplication.php(282): CController->run('')
+#20 Z:\home\yii-my-cms\www\framework\web\CWebApplication.php(141): CWebApplication->runController('admin/setting')
+#21 Z:\home\yii-my-cms\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#22 Z:\home\yii-my-cms\www\index.php(13): CApplication->run()
+#23 {main}
+REQUEST_URI=/admin/setting
+HTTP_REFERER=http://yii-my-cms/admin/
+---
+2014/01/06 19:32:16 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "admin/clear_cache".' in Z:\home\yii-my-cms\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\home\yii-my-cms\www\framework\web\CWebApplication.php(141): CWebApplication->runController('admin/clear_cac...')
+#1 Z:\home\yii-my-cms\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\home\yii-my-cms\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin/clear_cache
+HTTP_REFERER=http://yii-my-cms/admin/setting
+---
+2014/01/06 19:35:06 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "admin/clear_cache".' in Z:\home\yii-my-cms\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\home\yii-my-cms\www\framework\web\CWebApplication.php(141): CWebApplication->runController('admin/clear_cac...')
+#1 Z:\home\yii-my-cms\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\home\yii-my-cms\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin/clear_cache
+HTTP_REFERER=http://yii-my-cms/admin/setting
+---
+2014/01/06 19:36:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "admin/clearcache".' in Z:\home\yii-my-cms\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\home\yii-my-cms\www\framework\web\CWebApplication.php(141): CWebApplication->runController('admin/clearcach...')
+#1 Z:\home\yii-my-cms\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\home\yii-my-cms\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin/clearcache
+HTTP_REFERER=http://yii-my-cms/admin/setting
+---
+2014/01/06 19:36:47 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Невозможно обработать запрос "admin/clearcache".' in Z:\home\yii-my-cms\www\framework\web\CWebApplication.php:286
+Stack trace:
+#0 Z:\home\yii-my-cms\www\framework\web\CWebApplication.php(141): CWebApplication->runController('admin/clearcach...')
+#1 Z:\home\yii-my-cms\www\framework\base\CApplication.php(180): CWebApplication->processRequest()
+#2 Z:\home\yii-my-cms\www\index.php(13): CApplication->run()
+#3 {main}
+REQUEST_URI=/admin/clearcache
+HTTP_REFERER=http://yii-my-cms/admin/setting
+---

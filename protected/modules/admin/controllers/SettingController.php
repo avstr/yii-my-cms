@@ -20,7 +20,7 @@ class SettingController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('index'),
+                'actions'=>array('index', 'clearcache'),
                 'roles'=>array('admin'),
             ),
             array("deny",
@@ -39,10 +39,23 @@ class SettingController extends Controller
             }
 
         }
-
         $this->render('index',array(
             'model'=>$model,
         ));
     }
 
+    public function actionClearcache()
+    {
+        $model=Setting::model()->findByPk(1);
+//        echo "<pre>"; print_r($_POST); echo "</pre>";
+        if(isset($_POST))
+        {
+            if(Yii::app()->cache->flush()){
+                Yii::app()->user->setFlash('setting','Cache успешно очищена.');
+            }else{
+                Yii::app()->user->setFlash('setting','Не удалось очистить cache.');
+            }
+        }
+        $this->redirect(array('index'));
+    }
 }

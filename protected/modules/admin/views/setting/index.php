@@ -17,6 +17,7 @@
 
     <?php $form=$this->beginWidget('CActiveForm', array(
     'id'=>'settig-form',
+    'action' => '/admin/setting/index',
     // Please note: When you enable ajax validation, make sure the corresponding
     // controller action is handling ajax validation correctly.
     // There is a call to performAjaxValidation() commented in generated controller code.
@@ -46,4 +47,21 @@
 
     <?php $this->endWidget(); ?>
 
+</div>
+
+<div class="form">
+    <div class="row">
+        <?php $form=$this->beginWidget('CActiveForm', array(
+        'id'=>'clear_cache-form',
+        'action' => '/admin/setting/clearcache',
+        // Please note: When you enable ajax validation, make sure the corresponding
+        // controller action is handling ajax validation correctly.
+        // There is a call to performAjaxValidation() commented in generated controller code.
+        // See class documentation of CActiveForm for details on this.
+        'enableAjaxValidation'=>false,
+    )); ?>
+            Очистить кеш
+            <?php echo CHtml::submitButton("Очистить cache"); ?>
+        <?php $this->endWidget(); ?>
+    </div>
 </div>
