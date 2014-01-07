@@ -45,7 +45,6 @@ class PageUrlRule extends CBaseUrlRule
             if($urlPath == ''){
                 //находим всех родителей текущей страницы
                 if($page->parents == "/"){
-                    Yii::app()->cache->set($key_cache, $page->alias);
                     $urlPath = $page->alias;
                 }else{
                     $urlPath = $this->getPathAlias($page->parents);
@@ -95,7 +94,7 @@ class PageUrlRule extends CBaseUrlRule
             }
         }
         $urlPath = ($urlPath == '') ? '0' : $urlPath;
-       // Yii::app()->cache->set($key_cache, $urlPath);
+        Yii::app()->cache->set($key_cache, $urlPath);
         return ($urlPath === '0') ? false : $urlPath;
     }
 
