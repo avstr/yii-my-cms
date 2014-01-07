@@ -8,7 +8,7 @@ class PageController extends Controller
     {
         return array(
             'accessControl', // perform access control for CRUD operations
-            'postOnly + delete', // we only allow deletion via POST request
+           // 'postOnly + delete', // we only allow deletion via POST request
         );
     }
 
@@ -82,7 +82,6 @@ class PageController extends Controller
 
     public function actionDelete($id)
     {
-        echo '11';exit;
         $command = Yii::app()->db->createCommand();
         $command->delete('cms_page', 'parents LIKE ":id" OR id=:id', array(':id'=>$id));
         $this->redirect(array('index'));

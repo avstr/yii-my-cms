@@ -3,7 +3,6 @@
 /* @var $model News */
 
 $this->breadcrumbs=array(
-    'страница 2'=>('/757'),
 	'Новости'=>array('index'),
 	$model->title,
 );

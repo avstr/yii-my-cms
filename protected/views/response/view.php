@@ -3,7 +3,7 @@
 /* @var $model Response */
 
 $this->breadcrumbs=array(
-	'Responses'=>array('index'),
+	'Отзывы'=>array('index'),
 	$model->title,
 );
 
