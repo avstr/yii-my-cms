@@ -13,6 +13,8 @@ class PageUrlRule extends CBaseUrlRule
         //сформируем ключ для cache
         $urlPath = '';
         ksort($params);
+        //echo "<pre>"; print_r($params); echo "</pre>";
+        //echo "<br>{$route}<br>";
         $key_cache = $this->prefix_cache . md5($route . serialize($params));
         $value_cache = Yii::app()->cache->get($key_cache);
         if($value_cache !== false){
@@ -40,7 +42,7 @@ class PageUrlRule extends CBaseUrlRule
             if(empty($page)){
                 $urlPath = '0';
             }
-            if($urlPath != ''){
+            if($urlPath == ''){
                 //находим всех родителей текущей страницы
                 if($page->parents == "/"){
                     Yii::app()->cache->set($key_cache, $page->alias);
@@ -54,7 +56,7 @@ class PageUrlRule extends CBaseUrlRule
                 }
             }
         }
-        if($urlPath != ''){
+        if($urlPath == ''){
             //ищем нужный модуль с action
             $criteria = new CDbCriteria;
             $criteria->select = "URL, parents";
@@ -65,14 +67,14 @@ class PageUrlRule extends CBaseUrlRule
                 if(is_bool($urlPath) && $urlPath == false){
                     $urlPath = '0';
                 }
-                if($urlPath != ''){
+                if($urlPath == ''){
                     //echo "{$route}<pre>"; print_r($params); echo "</pre>";
                     $urlPath = ($urlPath == '') ? $route . $getStr : "{$urlPath}/{$route}" . $getStr;
                 }
             }
         }
 
-        if($urlPath != ''){
+        if($urlPath == ''){
             //ищем путь к модулю, если в базе нет module/action
             $routeParts = explode("/", $route);
 
@@ -87,12 +89,12 @@ class PageUrlRule extends CBaseUrlRule
                 if(is_bool($urlPath) && $urlPath == false){
                     $urlPath = '0';
                 }
-                if($urlPath != ''){
+                if($urlPath == ''){
                     $urlPath = ($urlPath == '') ? $route.$getStr : "{$urlPath}/{$route}".$getStr;
                 }
             }
         }
-        $urlPath = ($urlPath != '') ? $urlPath : '0';
+        $urlPath = ($urlPath == '') ? '0' : $urlPath;
         Yii::app()->cache->set($key_cache, $urlPath);
         return ($urlPath === '0') ? false : $urlPath;
     }
