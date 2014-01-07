@@ -41,6 +41,12 @@
         <?php echo $form->error($model,'sizeSideSmallNewsPicture'); ?>
     </div>
 
+    <div class="row">
+        <?php echo $form->labelEx($model,'hiddenNewResponse'); ?>
+        <?php echo $form->checkBox($model,'hiddenNewResponse', array("uncheckedValue"=>"no", "checkedValue"=>"yes", "value"=>"yes")); ?>
+        <?php echo $form->error($model,'hiddenNewResponse'); ?>
+    </div>
+
     <div class="row buttons">
         <?php echo CHtml::submitButton("Сохранить"); ?>
     </div>

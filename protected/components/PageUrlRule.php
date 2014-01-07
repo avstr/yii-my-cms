@@ -95,7 +95,7 @@ class PageUrlRule extends CBaseUrlRule
             }
         }
         $urlPath = ($urlPath == '') ? '0' : $urlPath;
-        Yii::app()->cache->set($key_cache, $urlPath);
+       // Yii::app()->cache->set($key_cache, $urlPath);
         return ($urlPath === '0') ? false : $urlPath;
     }
 

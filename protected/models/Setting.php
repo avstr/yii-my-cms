@@ -30,7 +30,7 @@ class Setting extends CActiveRecord
 			array('sizeSideNewsPicture, sizeSideSmallNewsPicture', 'numerical', 'integerOnly'=>true),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, sizeSideNewsPicture, sizeSideSmallNewsPicture', 'safe', 'on'=>'search'),
+			array('id, sizeSideNewsPicture, sizeSideSmallNewsPicture, hiddenNewResponse', 'safe'),
 		);
 	}
 
@@ -54,35 +54,10 @@ class Setting extends CActiveRecord
 			'id' => 'ID',
 			'sizeSideNewsPicture' => 'Размер стороны картинки для новостей, рх',
 			'sizeSideSmallNewsPicture' => 'Размер стороны маленькой картинки для новостей, рх',
+            'hiddenNewResponse' => 'Скрыть отзыв при добавлении отзыва пользователем',
 		);
 	}
 
-	/**
-	 * Retrieves a list of models based on the current search/filter conditions.
-	 *
-	 * Typical usecase:
-	 * - Initialize the model fields with values from filter form.
-	 * - Execute this method to get CActiveDataProvider instance which will filter
-	 * models according to data in model fields.
-	 * - Pass data provider to CGridView, CListView or any similar widget.
-	 *
-	 * @return CActiveDataProvider the data provider that can return the models
-	 * based on the search/filter conditions.
-	 */
-	public function search()
-	{
-		// @todo Please modify the following code to remove attributes that should not be searched.
-
-		$criteria=new CDbCriteria;
-
-		$criteria->compare('id',$this->id);
-		$criteria->compare('sizeSideNewsPicture',$this->sizeSideNewsPicture);
-		$criteria->compare('sizeSideSmallNewsPicture',$this->sizeSideSmallNewsPicture);
-
-		return new CActiveDataProvider($this, array(
-			'criteria'=>$criteria,
-		));
-	}
 
 	/**
 	 * Returns the static model of the specified AR class.

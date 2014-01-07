@@ -69,12 +69,12 @@
 
 	<div class="row">
         <?php echo $form->labelEx($model,'hidden'); ?>
-        <?php echo $form->checkBox($model,'hidden', array("uncheckedValue"=>"no", "checkedValue"=>"yes", "value"=>"no")); ?>
+        <?php echo $form->checkBox($model,'hidden', array("uncheckedValue"=>"no", "checkedValue"=>"yes", "value"=>$model->hidden)); ?>
         <?php echo $form->error($model,'hidden'); ?>
 	</div>
-
+    <input type="hidden" name="mode" value="admin">
 	<div class="row buttons">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Добавить' : 'Сохранить'); ?>
 	</div>
 
 <?php $this->endWidget(); ?>

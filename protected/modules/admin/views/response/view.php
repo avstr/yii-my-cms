@@ -21,7 +21,10 @@ $this->menu=array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
-		'date',
+        array(
+            'name' => 'Дата',
+            'value' => date("d.m.Y", strtotime($model->date)),
+        ),
 		'name',
 		'email',
 		'title',
@@ -29,4 +32,5 @@ $this->menu=array(
 		'answer',
 		'hidden',
 	),
-)); ?>
+));
+?>

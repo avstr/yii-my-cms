@@ -82,6 +82,7 @@ class PageController extends Controller
 
     public function actionDelete($id)
     {
+        echo '11';exit;
         $command = Yii::app()->db->createCommand();
         $command->delete('cms_page', 'parents LIKE ":id" OR id=:id', array(':id'=>$id));
         $this->redirect(array('index'));

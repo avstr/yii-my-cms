@@ -31,7 +31,7 @@ class Response extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('date, name, email, title, text', 'required'),
+			array('name, email, title, text', 'required'),
 			array('name, email, title', 'length', 'max'=>255),
 			array('hidden', 'length', 'max'=>3),
             array('email','email'),
@@ -112,10 +112,17 @@ class Response extends CActiveRecord
 	}
 
     public function beforeSave(){
-        //определяем hidden
-        if($this->hidden != "yes"){
-            $this->hidden = "no";
+       //echo "<pre>"; print_r($_POST); echo "</pre>";
+        if(isset($_POST['mode']) && ($_POST['mode'] == 'admin') && Yii::app()->user->role === "admin"){
+            if($this->hidden != "yes"){
+                $this->hidden = "no";
+            }
+        }else{
+            $this->date = date("Y-m-d H:i:s");
+            $setting = Setting::model()->findByPk(1);
+            $this->hidden = $setting->hiddenNewResponse;
         }
+
         return parent::beforeSave();
     }
 }

@@ -1,4 +1,20 @@
 <?php
+class Test{
+    private $var;
+    function setMe($value){
+        $this->var = $value;
+    }
+}
+
+class More extends Test{
+    public $var;
+}
+$oMore = new More;
+
+$oMore->setMe('foo');
+
+echo $oMore->var;
+
 /* @var $this ResponseController */
 /* @var $model Response */
 
