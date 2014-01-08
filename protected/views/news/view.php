@@ -1,11 +1,9 @@
 <?php
 /* @var $this NewsController */
 /* @var $model News */
-
-$this->breadcrumbs=array(
-	'Новости'=>array('index'),
-	$model->title,
-);
+$this->breadcrumbs=array_merge(PageUrlRule::$fullBreadCrumbs, array(
+    $model->title,
+));
 
 ?>
 

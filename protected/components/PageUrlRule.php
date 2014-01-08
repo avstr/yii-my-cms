@@ -3,7 +3,8 @@ class PageUrlRule extends CBaseUrlRule
 {
     public $connectionID = 'db';
     private $prefix_cache = "page_";
-    static $breadCrumbs = array();
+    static $breadCrumbs = array(); //хлебные крошки (последний элемент не является ссылкой)
+    static $fullBreadCrumbs = array(); //хлебные крошки (последний элемент является ссылкой)
 
 
     public function createUrl($manager,$route,$params,$ampersand)
@@ -42,7 +43,7 @@ class PageUrlRule extends CBaseUrlRule
             if(empty($page)){
                 $urlPath = '0';
             }
-            if($urlPath == ''){
+            if($urlPath === ''){
                 //находим всех родителей текущей страницы
                 if($page->parents == "/"){
                     $urlPath = $page->alias;
@@ -55,7 +56,7 @@ class PageUrlRule extends CBaseUrlRule
                 }
             }
         }
-        if($urlPath == ''){
+        if($urlPath === ''){
             //ищем нужный модуль с action
             $criteria = new CDbCriteria;
             $criteria->select = "URL, parents";
@@ -66,14 +67,13 @@ class PageUrlRule extends CBaseUrlRule
                 if(is_bool($urlPath) && $urlPath == false){
                     $urlPath = '0';
                 }
-                if($urlPath == ''){
-                    //echo "{$route}<pre>"; print_r($params); echo "</pre>";
+                if($urlPath !== '0'){
                     $urlPath = ($urlPath == '') ? $route . $getStr : "{$urlPath}/{$route}" . $getStr;
                 }
             }
         }
 
-        if($urlPath == ''){
+        if($urlPath === ''){
             //ищем путь к модулю, если в базе нет module/action
             $routeParts = explode("/", $route);
 
@@ -88,12 +88,12 @@ class PageUrlRule extends CBaseUrlRule
                 if(is_bool($urlPath) && $urlPath == false){
                     $urlPath = '0';
                 }
-                if($urlPath == ''){
+                if($urlPath !== '0'){
                     $urlPath = ($urlPath == '') ? $route.$getStr : "{$urlPath}/{$route}".$getStr;
                 }
             }
         }
-        $urlPath = ($urlPath == '') ? '0' : $urlPath;
+        $urlPath = ($urlPath === '') ? '0' : $urlPath;
         Yii::app()->cache->set($key_cache, $urlPath);
         return ($urlPath === '0') ? false : $urlPath;
     }
@@ -109,15 +109,21 @@ class PageUrlRule extends CBaseUrlRule
         $urlPathIds = "/" . $pathInfo . "/";
 
         $pageByAlias = array();
+        $pagesById = array();
         foreach($pages as $page){
+            $pagesById[$page['id']] = $page;
             $pageByAlias[$page["alias"]] = $page;
         }
 
         $pageIds = array();
+        $breadCrumbs = array();
+        $currentUrlPage = '';
         foreach($aliases as $alias){
             if(!empty($pageByAlias[$alias])){
                 $currentAlias = $alias;
                 $pageIds[] = $pageByAlias[$alias]["id"];
+                $currentUrlPage .= '/' . $pagesById[$pageByAlias[$alias]["id"]]['alias'];
+                $breadCrumbs[$pagesById[$pageByAlias[$alias]["id"]]['title']] = array($currentUrlPage);
             }else{
                 break;
             }
@@ -131,8 +137,14 @@ class PageUrlRule extends CBaseUrlRule
         if($urlPathIds != $realPathIds){
             return false;
         }
+        self::$fullBreadCrumbs = $breadCrumbs;
+        self::$breadCrumbs = $breadCrumbs;
+        $lastKeyBreadCrumbs = end(array_keys(PageUrlRule::$breadCrumbs));
+        unset(self::$breadCrumbs[$lastKeyBreadCrumbs]);
+        self::$breadCrumbs[] = $lastKeyBreadCrumbs;
 
         //формируем остаток пути
+       // echo "<pre>"; print_r(self::$breadCrumbs); echo "</pre>";
         $restPath = array_slice($aliases, sizeof($pageIds));
         switch($currentPage["type"]){
             case "static":

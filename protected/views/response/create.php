@@ -1,11 +1,9 @@
 <?php
 /* @var $this ResponseController */
 /* @var $model Response */
-
-$this->breadcrumbs=array(
-	'Отзывы'=>array('index'),
+$this->breadcrumbs=array_merge(PageUrlRule::$fullBreadCrumbs, array(
 	'Добавить отзыв',
-);
+));
 
 ?>
 

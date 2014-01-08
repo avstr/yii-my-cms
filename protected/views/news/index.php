@@ -2,9 +2,7 @@
 /* @var $this NewsController */
 /* @var $dataProvider CActiveDataProvider */
 
-$this->breadcrumbs=array(
-	'Новости',
-);
+$this->breadcrumbs=PageUrlRule::$breadCrumbs;
 
 ?>
 

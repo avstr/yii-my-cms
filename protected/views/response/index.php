@@ -2,9 +2,7 @@
 /* @var $this ResponseController */
 /* @var $dataProvider CActiveDataProvider */
 
-$this->breadcrumbs=array(
-	'Отзывы',
-);
+$this->breadcrumbs=PageUrlRule::$breadCrumbs;
 
 ?>
 
