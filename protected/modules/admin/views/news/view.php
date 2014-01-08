@@ -7,7 +7,7 @@ $this->menu=array(
 	array('label'=>'Журнал новостей', 'url'=>array('index')),
 	array('label'=>'Создать новость', 'url'=>array('create')),
 	array('label'=>'Редактировать новость', 'url'=>array('update', 'id'=>$model->id)),
-	array('label'=>'Удалить новость', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Are you sure you want to delete this item?')),
+	array('label'=>'Удалить новость', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->id),'confirm'=>'Вы уверены, что хотите удалить эту новость?')),
 );
 ?>
 
@@ -23,7 +23,11 @@ $this->menu=array(
         ),
 		'title',
 		'shorh_desc',
-		'description',
+        array(
+            'name' => 'Описание',
+            'type' => 'raw',
+            'value' => $model->description,
+        ),
         array(
             'name' => 'Скрыто',
             'value' => ($model->hidden == 'yes') ? 'да' : 'нет',

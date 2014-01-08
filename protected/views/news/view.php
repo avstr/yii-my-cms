@@ -18,7 +18,11 @@ $this->breadcrumbs=array(
 		'date',
 		'title',
 		'shorh_desc',
-		'description',
+        array(
+            'name' => 'Описание',
+            'type' => 'raw',
+            'value' => 'dascription',
+        ),
         array(
             'name' => 'Изображение',
             //'type'=>'image',

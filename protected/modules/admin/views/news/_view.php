@@ -22,7 +22,10 @@ gfgfdgsdf
 	<br />
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('description')); ?>:</b>
-	<?php echo $data->description; ?>
+    array(
+    'name' => 'description',
+    'type' => 'html'
+    ),
 	<br />
 
     <b><?php echo CHtml::encode($data->getAttributeLabel('hidden')); ?>:</b>

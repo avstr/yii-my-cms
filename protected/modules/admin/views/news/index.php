@@ -51,6 +51,7 @@ $('.search-form form').submit(function(){
         array(
             'name'=>'description',
             'header' => 'Описание',
+            'type' => 'html',
             'filter' => '',
             'value' => '$data->description',
         ),

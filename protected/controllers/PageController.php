@@ -6,6 +6,7 @@ class PageController extends Controller
 
     public function actionIndex($id)
     {
+        echo "{$id}<br>";
         $model=$this->loadModel($id);
 
         $this->render('index',array(

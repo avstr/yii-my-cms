@@ -164,9 +164,11 @@ class Page extends CActiveRecord
         $pages=self::model()->findAll($criteria);
        // $pages = Yii::app()->db->createCommand()->select('id, pid, title')->from("{{page}}")->order("level")->queryAll();
         //получаем всех родителей активной страницы
-        $active_page = self::model()->findByPk(self::$active_id);
-        if(!empty($active_page)){
-            self::$active_parents = explode('/', $active_page->parents);
+        if((int)self::$active_id > 0){
+            $active_page = self::model()->findByPk(self::$active_id);
+            if(!empty($active_page)){
+                self::$active_parents = explode('/', $active_page->parents);
+            }
         }
 
         $items = array();
