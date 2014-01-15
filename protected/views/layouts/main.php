@@ -1,6 +1,8 @@
 <?php /* @var $this Controller */ ?>
 <?php
 Yii::app()->getClientScript()->registerCssFile('/css/navigation.css' );
+//соцсети
+Yii::app()->getClientScript()->registerPackage('sociallikes');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
@@ -29,7 +31,17 @@ Yii::app()->getClientScript()->registerCssFile('/css/navigation.css' );
 		<div id="logo"><?php echo CHtml::encode(Yii::app()->name); ?></div>
 	</div><!-- header -->
 
-
+    <!--social-likes -->
+    <ul class="social-likes" data-counters="no">
+        <li class="facebook" title="Поделиться ссылкой на Фейсбуке">&nbsp</li>
+        <li class="twitter" title="Поделиться ссылкой в Твиттере">Twitter</li>
+        <li class="mailru" title="Поделиться ссылкой в Моём мире">Мой мир</li>
+        <li class="vkontakte" title="Поделиться ссылкой во Вконтакте">Вконтакте</li>
+        <li class="odnoklassniki" title="Поделиться ссылкой в Одноклассниках">Одноклассники</li>
+        <li class="plusone" title="Поделиться ссылкой в Гугл-плюсе">Google+</li>
+    </ul>
+    <!--social-likes -->
+    <br><br>
     <div class="top-panel">
         <?php
         $this->widget('zii.widgets.CMenu', array(
@@ -40,6 +52,7 @@ Yii::app()->getClientScript()->registerCssFile('/css/navigation.css' );
         //echo Yii::app()->createAbsoluteUrl("site/login", array('id' => $page["id"]));
         ?>
     </div><!-- top-panel -->
+
     <div class="clear-both">
 
     </div>

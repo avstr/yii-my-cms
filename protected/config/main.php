@@ -71,7 +71,13 @@ return array(
                     'baseUrl' => 'jquery',
                     'js' => array('jquery-ui-1.9.2.custom.min.js'),
                     'depends' => array('jquery'),
-                )
+                ),
+                'sociallikes' => array(
+                    'baseUrl' => 'jquery/social-likes',
+                    'js' => array('social-likes.min.js'),
+                    'css' => array('social-likes.css'),
+                    'depends' => array('jquery'),
+                ),
             )
         ),
         'user'=>array(
