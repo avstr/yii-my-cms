@@ -15,7 +15,6 @@
         {
             return array(
                 'accessControl', // perform access control for CRUD operations
-                'postOnly + delete', // we only allow deletion via POST request
             );
         }
 
@@ -30,14 +29,6 @@
                 array('allow',  // allow all users to perform 'index' and 'view' actions
                     'actions'=>array('index','view'),
                     'users'=>array('*'),
-                ),
-                array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                    'actions'=>array('create','update'),
-                    'users'=>array('@'),
-                ),
-                array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                    'actions'=>array('admin','delete'),
-                    'users'=>array('admin'),
                 ),
                 array('deny',  // deny all users
                     'users'=>array('*'),
@@ -76,20 +67,6 @@
             ));
         }
 
-        /**
-         * Manages all models.
-         */
-        public function actionAdmin()
-        {
-            $model=new News('search');
-            $model->unsetAttributes();  // clear any default values
-            if(isset($_GET['News']))
-                $model->attributes=$_GET['News'];
-
-            $this->render('admin',array(
-                'model'=>$model,
-            ));
-        }
 
         /**
          * Returns the data model based on the primary key given in the GET variable.
@@ -100,23 +77,17 @@
          */
         public function loadModel($id)
         {
-            $model=News::model()->findByPk($id);
+            $criteria = new CDbCriteria();
+            $criteria->condition = "hidden=:hidden AND id=:id";
+            $criteria->params = array(
+                ':hidden' => 'no',
+                ':id' => $id,
+            );
+            $model=News::model()->find($criteria);
             if($model===null)
-                throw new CHttpException(404,'The requested page does not exist.');
+                throw new CHttpException(404,"Нет статьи с id = {$id}.");
             return $model;
         }
 
-        /**
-         * Performs the AJAX validation.
-         * @param News $model the model to be validated
-         */
-        protected function performAjaxValidation($model)
-        {
-            if(isset($_POST['ajax']) && $_POST['ajax']==='news-form')
-            {
-                echo CActiveForm::validate($model);
-                Yii::app()->end();
-            }
-        }
     }
 ?>
