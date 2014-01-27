@@ -15,7 +15,7 @@
 	'enableAjaxValidation'=>false,
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+	<p class="note">Поля с <span class="required">*</span> должны быть заполнены.</p>
 
 	<?php echo $form->errorSummary($model); ?>
 
@@ -57,8 +57,8 @@
 	</div>
 
 	<div class="row">
-		<?php echo $form->labelEx($model,'ban'); ?>
-		<?php echo $form->checkBox($model,'ban', array("value"=>"yes")); ?>
+		<?php echo $form->labelEx($model,'status'); ?>
+		<?php echo $form->dropDownList($model,'status',array('no_verify'=>'новый','verify'=>'подтвержденный','banned'=>'забаненый','deleted'=>'удаленный')); ?>
 		<?php echo $form->error($model,'ban'); ?>
 	</div>
 

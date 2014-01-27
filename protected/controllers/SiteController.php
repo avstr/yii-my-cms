@@ -75,7 +75,157 @@ class SiteController extends Controller
 		$this->render('contact',array('model'=>$model));
 	}
 
-	/**
+    public function actionRegistration()
+    {
+        $model=new User;
+        $model->scenario = "registration";
+
+        if(isset($_POST['User']))
+        {
+            $model->attributes=$_POST['User'];
+            if($model->save()){
+                //после сохранение отсылаем письмо пользователю
+                if(Yii::app()->user->isGuest){
+                    $setting = Setting::model()->findByPk(1);
+                    Yii::app()->mailer->IsMail();
+                    Yii::app()->mailer->From = $setting->email;
+                    Yii::app()->mailer->FromName = Yii::app()->name;
+                    Yii::app()->mailer->AddAddress($model->email); //кому
+                    Yii::app()->mailer->Subject = 'Авторизация на сайте';
+                    Yii::app()->mailer->CharSet = 'UTF-8';
+                    Yii::app()->mailer->ContentType = 'text/html';
+                    Yii::app()->mailer->Body =$this->renderPartial('mail',array(
+                        'model' => $model,
+                        'subject' => 'user_verify',
+                    ), true);
+                    Yii::app()->mailer->Send();
+                }
+                Yii::app()->user->setFlash("registration", "На Ваш почтовый ящик выслано письмо");
+            }
+
+        }
+
+        $this->render('registration',array(
+            'model'=>$model,
+        ));
+    }
+
+    public function actionVerify($id, $secure_code){
+        $result = '';
+        $model = User::model()->findByPk($id);
+        if($model == null){
+            $result = "not_user";
+        }
+        if($result == ''){
+            if($model->status == 'verify'){
+                $result = 'earlier_verify';
+            }
+        }
+        if($result == ''){
+            if($model->id == $id && $model->secure_code == $secure_code){
+                $model->secure_code = '';
+                $model->status = 'verify';
+                $model->save(false);
+                $result = 'verify';
+            }else{
+                $result = 'error_id_secure_code';
+            }
+        }
+        $this->render('verify', array(
+            'result' => $result,
+        ));
+    }
+
+    public function actionRecoverpass(){
+        $model = new User;
+        $errors = array();
+        if(isset($_POST['User'])){
+            $model->email = $_POST['User']['email'];
+            //проверяем email
+            if($model->email == ''){
+                $errors['email'] = "empty_email";
+            }
+            if(empty($errors) && !preg_match('/[\.\-_A-Za-z0-9]+?@[\.\-A-Za-z0-9]+?[\ .A-Za-z0-9]{2,}/', $model->email)){
+                $errors['email'] = "validation_email";
+            }
+            if(empty($errors)){
+                //получаем запись с заданным email
+                $criteria = new CDbCriteria();
+                $criteria->condition = "email = :email";
+                $criteria->params = array(
+                    ':email' => $model->email,
+                );
+                $user = User::model()->find($criteria);
+                if($user == null){
+                    $errors['email'] = "not_user";
+                }else{
+                    $model = $user;
+                }
+            }
+            if(empty($errors)){
+                //генерим случайный код и время, до которого действует пароль
+                $model->secure_code = md5(time().$model->email);
+                $model->time_secure_code = date("Y-m-d H:i:s", time() + 24*60*60);
+
+                if($model->save(false)){
+                    //отправляем письмо по заданному email
+                    $setting = Setting::model()->findByPk(1);
+                    Yii::app()->mailer->IsMail();
+                    Yii::app()->mailer->From = $setting->email;
+                    Yii::app()->mailer->FromName = Yii::app()->name;
+                    Yii::app()->mailer->AddAddress($model->email); //кому
+                    Yii::app()->mailer->Subject = 'Восстановление пароля';
+                    Yii::app()->mailer->CharSet = 'UTF-8';
+                    Yii::app()->mailer->ContentType = 'text/html';
+                    Yii::app()->mailer->Body =$this->renderPartial('mail',array(
+                        'model' => $model,
+                        'subject' => 'recover_password',
+                    ), true);
+                    Yii::app()->mailer->Send();
+                    Yii::app()->user->setFlash('mail','Вам на почту выслано письмо!');
+                }
+
+            }
+
+        }
+        $this->render('recover_password', array(
+            'model' => $model,
+            'errors' => $errors,
+        ));
+
+    }
+
+    public function actionPassword($id, $secure_code){
+        $result = '';
+        $model = User::model()->findByPk($id);
+        $model->scenario = "password";
+        if($model == null){
+            throw new CHttpException(404,"Нет пользователя с id = {$id}.");
+        }
+        $model->password = '';
+        if($model->id == $id && $model->secure_code == $secure_code){
+            if(isset($_POST['User'])){
+
+                $model->password=$_POST['User']['password'];
+                $model->password_repeat=$_POST['User']['password_repeat'];
+                $model->secure_code = '';
+                $model->time_secure_code = '';
+                echo "<pre>"; print_r($model); echo "</pre>";
+                if($model->save()){
+                    header((is_set($_POST['referer']))? $_POST['referer'] : Yii::app()->createUrl('site/index'));
+                    exit;
+                }
+            }
+        }else{
+            throw new CHttpException(404,"Неверный секретный код.");;
+        }
+
+        $this->render('password', array(
+            'model' => $model,
+        ));
+
+    }
+    /**
 	 * Displays the login page
 	 */
 	public function actionLogin()

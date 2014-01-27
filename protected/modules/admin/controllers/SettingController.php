@@ -19,7 +19,7 @@ class SettingController extends Controller
     public function accessRules()
     {
         return array(
-            array('allow',  // allow all users to perform 'index' and 'view' actions
+            array('allow',  // allow all users to perform actions
                 'actions'=>array('index', 'clearcache'),
                 'roles'=>array('admin'),
             ),

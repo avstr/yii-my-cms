@@ -38,12 +38,12 @@
 
 	<div class="row">
 		<?php echo $form->label($model,'role'); ?>
-		<?php echo $form->dropDownList($model,'role',array('user'=>'user','admin'=>'admin')); ?>
+		<?php echo $form->dropDownList($model,'role',array('' => '', 'user'=>'user','admin'=>'admin')); ?>
 	</div>
 
 	<div class="row">
-		<?php echo $form->label($model,'ban'); ?>
-		<?php echo $form->dropDownList($model,'ban',array('yes'=>'да','no'=>'нет')); ?>
+		<?php echo $form->label($model,'status'); ?>
+		<?php echo $form->dropDownList($model,'status',array('' => '', 'no_verify'=>'новые','verify'=>'подтвержденные', 'banned' => 'забанненные', 'deleted' => 'удаленные')); ?>
 	</div>
 
 	<div class="row">

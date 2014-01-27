@@ -26,7 +26,10 @@ $this->menu=array(
 		'login',
 		'created',
 		'role',
-		'ban',
+		'status' => array(
+            'name' => 'Статус',
+            'value' => ($model->status == "no_verify") ? "новый" : (($model->status == "verify") ? "подтвержденный" : (($model->status == "banned") ? "забанненный" : "удаленный")),
+        ),
 		'email',
 	),
 )); ?>

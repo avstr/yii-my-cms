@@ -12,3 +12,5 @@ $this->breadcrumbs=PageUrlRule::$breadCrumbs;
 	'dataProvider'=>$dataProvider,
 	'itemView'=>'_view',
 )); ?>
+
+

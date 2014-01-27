@@ -37,6 +37,11 @@ return array(
             'class' => 'system.caching.CFileCache',
             'cachePath' => 'protected/runtime/filecache',
         ),
+        'mailer' => array(
+            'class' => 'application.extensions.mailer.EMailer',
+            'pathViews' => 'application.views.email',
+            'pathLayouts' => 'application.views.email.layouts'
+        ),
         'ih'=>array('class'=>'CImageHandler'),
         'authManager' => array(
             // Будем использовать свой менеджер авторизации

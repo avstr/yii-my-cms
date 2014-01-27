@@ -13,13 +13,17 @@ $this->breadcrumbs=array_merge(PageUrlRule::$fullBreadCrumbs, array(
 	'data'=>$model,
 	'attributes'=>array(
 		'id',
+        array(
+            'name' => 'Дата',
+            'value' => date("d.m.Y", strtotime($model->date)),
+        ),
 		'date',
 		'title',
 		'shorh_desc',
         array(
             'name' => 'Описание',
             'type' => 'raw',
-            'value' => 'dascription',
+            'value' => $model->description,
         ),
         array(
             'name' => 'Изображение',
@@ -33,3 +37,29 @@ $this->breadcrumbs=array_merge(PageUrlRule::$fullBreadCrumbs, array(
         ),
 	),
 )); ?>
+
+<?php if(!Yii::app()->user->isGuest):?>
+<?php
+//echo "<pre>"; print_r(Yii::app()->session->get("comment_model")); echo "</pre>"; exit;
+    $commentModel = unserialize(Yii::app()->session->get("comment_model"));
+    if(empty($commentModel)){
+        $commentModel = new Comment;
+    }else{
+        Yii::app()->session->add("comment_model", '');
+    }
+    //echo "<pre>"; print_r($commentModel);echo "</pre>";
+    $this->renderPartial('../comment/form',array(
+        'moduleName' => 'news',
+        'objectId' => $model->id,
+        'model' => $commentModel,
+    ));
+?>
+<?php endif ?>
+<?php
+    Comment::listForObject('news', $model->id);
+    $this->renderPartial('../comment/list',array(
+        'comments' => Comment::$commentsForObject,
+    ));
+
+?>
+

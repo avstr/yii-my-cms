@@ -30,6 +30,12 @@
     <?php echo $form->errorSummary($model); ?>
 
     <div class="row">
+        <?php echo $form->labelEx($model,'email'); ?>
+        <?php echo $form->textField($model,'email'); ?>
+        <?php echo $form->error($model,'email'); ?>
+    </div>
+
+    <div class="row">
         <?php echo $form->labelEx($model,'sizeSideNewsPicture'); ?>
         <?php echo $form->textField($model,'sizeSideNewsPicture'); ?>
         <?php echo $form->error($model,'sizeSideNewsPicture'); ?>

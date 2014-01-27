@@ -27,7 +27,7 @@ class ResponseController extends Controller
     public function accessRules()
     {
         return array(
-            array('allow',  // allow all users to perform 'index' and 'view' actions
+            array('allow',  // allow all users to perform actions
                 'actions'=>array('index','view', 'update', 'create', 'delete'),
                 'roles'=>array('admin'),
             ),

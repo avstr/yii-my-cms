@@ -29,7 +29,8 @@ $('.search-form form').submit(function(){
 )); ?>
 </div><!-- search-form -->
 
-<?php $this->widget('zii.widgets.grid.CGridView', array(
+<?php
+$this->widget('zii.widgets.grid.CGridView', array(
     'id'=>'user-grid',
     'dataProvider'=>$model->search(),
     'filter'=>$model,
@@ -46,10 +47,10 @@ $('.search-form form').submit(function(){
             'name' => 'role',
             'filter' => array("user" => "user", "admin" => "admin"),
         ),
-        'ban' =>array(
-            'name' => 'ban',
-            "value" =>'($data->ban == "yes") ? "да" : "нет"',
-            'filter' => array("yes"=>"да", "no"=>"нет"),
+        'status' =>array(
+            'name' => 'status',
+            "value" =>'($data->status == "no_verify") ? "новый" : (($data->status == "verify") ? "подтвержденный" : (($data->status == "banned") ? "забанненный" : "удаленный"))',
+            'filter' => array('no_verify'=>'новый','verify'=>'подтвержденный', 'banned' => 'забанненный', 'deleted' => 'удаленный'),
         ),
         'email',
         array(

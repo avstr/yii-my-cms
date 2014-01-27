@@ -12,7 +12,7 @@
  * @property string $password
  * @property integer $created
  * @property string $role
- * @property string $ban
+ * @property string $status
  * @property string $email
  */
 class User extends CActiveRecord
@@ -21,6 +21,8 @@ class User extends CActiveRecord
     const ROLE_ADMIN = 'admin';
     const ROLE_USER = 'user';
     const ROLE_BANNED = 'banned';
+    public $verifyCode;
+    public $password_repeat;
     /**
 	 * @return string the associated database table name
 	 */
@@ -37,15 +39,18 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('name, surname, login, password, role, email', 'required'),
-            array('login', 'unique'),
+			array('name, surname, login, password, email', 'required'),
+            array('role', 'required', 'on' => 'create, update'),
+            array('login, email', 'unique'),
             array('email','email'),
 			array('name, secondname, surname, login, password, email', 'length', 'max'=>255),
 			array('role', 'length', 'max'=>5),
-			array('ban', 'length', 'max'=>3),
+            array('verifyCode', 'captcha', 'allowEmpty'=>!CCaptcha::checkRequirements(), 'on'=>'registration'),
+            array('password_repeat', 'required', 'on' => 'registration'),
+			array('password', 'compare', 'compareAttribute'=>'password_repeat', 'on' => 'registration, password', 'message' => 'Пароли не совпадают'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, name, secondname, surname, login, password, created, role, ban, email', 'safe'),
+            array('id, name, secondname, surname, login, password, created, role, email, status', 'safe'),
 		);
 	}
 
@@ -72,10 +77,12 @@ class User extends CActiveRecord
 			'surname' => 'Фамилия',
 			'login' => 'Логин',
 			'password' => 'Пароль',
+            'password_repeat' => 'Повторите пароль',
 			'created' => 'Дата создания',
-			'role' => 'Роль',
-			'ban' => 'Ban',
+			'status' => 'Статус',
+            'role' => 'Роль',
 			'email' => 'Email',
+            'verifyCode' => "Код с картинки",
 		);
 	}
 
@@ -105,7 +112,7 @@ class User extends CActiveRecord
 		$criteria->compare('password',$this->password,true);
 		$criteria->compare('created',$this->created);
 		$criteria->compare('role',$this->role,true);
-		$criteria->compare('ban',$this->ban,true);
+		$criteria->compare('status',$this->status,true);
 		$criteria->compare('email',$this->email,true);
 
 		return new CActiveDataProvider($this, array(
@@ -127,11 +134,20 @@ class User extends CActiveRecord
     protected function beforeSave(){
         if($this->isNewRecord){
             $this->created = time();
+            //выставляем роль
+            if(empty($this->role)){
+                $this->role = 'user';
+            }
+            //выставляем secure_code
+            if(Yii::app()->user->isGuest){
+                $this->secure_code = md5(time().$this->email);
+                $this->status = 'no_verify';
+            }
         }
-        if($this->ban != 'yes'){
-            $this->ban = "no";
+        if($this->scenario == "registration" || $this->scenario == "password"){
+            $this->password = md5($this->password);
         }
-        $this->password = md5($this->password);
+
         return parent::beforeSave();
     }
 }

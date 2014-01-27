@@ -9,7 +9,10 @@ class UserIdentity extends CUserIdentity {
         // Производим стандартную аутентификацию, описанную в руководстве.
         //echo "<pre>"; print_r($this); echo "</pre>";
         $user = User::model()->find('LOWER(login)=?', array(strtolower($this->username)));
-        if(($user===null) || (md5($this->password)!==$user->password)) {
+        if($user->status === 'no_verify'){
+           // $this->addError('password','Not verify.');
+            //$this->errorCode = self::ERROR_NO_VERIFY;
+        }elseif(($user===null) || (md5($this->password)!==$user->password)) {
             $this->errorCode = self::ERROR_USERNAME_INVALID;
         } else {
             // В качестве идентификатора будем использовать id, а не username,

@@ -26,11 +26,12 @@ class Setting extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('sizeSideNewsPicture, sizeSideSmallNewsPicture', 'required'),
+			array('sizeSideNewsPicture, sizeSideSmallNewsPicture, email', 'required'),
 			array('sizeSideNewsPicture, sizeSideSmallNewsPicture', 'numerical', 'integerOnly'=>true),
+            array('email', 'email'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, sizeSideNewsPicture, sizeSideSmallNewsPicture, hiddenNewResponse', 'safe'),
+			array('id, sizeSideNewsPicture, sizeSideSmallNewsPicture, hiddenNewResponse, email', 'safe'),
 		);
 	}
 
@@ -55,6 +56,7 @@ class Setting extends CActiveRecord
 			'sizeSideNewsPicture' => 'Размер стороны картинки для новостей, рх',
 			'sizeSideSmallNewsPicture' => 'Размер стороны маленькой картинки для новостей, рх',
             'hiddenNewResponse' => 'Скрыть отзыв при добавлении отзыва пользователем',
+            'email' => 'Email сайта'
 		);
 	}
 

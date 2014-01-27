@@ -211,10 +211,6 @@ class Page extends CActiveRecord
         return $item;
     }
 
-
-
-
-
     public static function itemList($active_id = 0){
         self::$active_id = $active_id;
         if(!empty(self::$list)){

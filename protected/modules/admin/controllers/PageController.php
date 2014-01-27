@@ -15,7 +15,7 @@ class PageController extends Controller
     public function accessRules()
     {
         return array(
-            array('allow',  // allow all users to perform 'index' and 'view' actions
+            array('allow',  // allow all users to perform actions
                 'actions'=>array('index', 'create', 'update', 'delete', 'move', 'getchildren'),
                 'roles'=>array('admin'),
             ),
@@ -83,7 +83,7 @@ class PageController extends Controller
     public function actionDelete($id)
     {
         $command = Yii::app()->db->createCommand();
-        $command->delete('cms_page', 'parents LIKE ":id" OR id=:id', array(':id'=>$id));
+        $command->delete(Yii::app()->db->tablePrefix . 'page', 'parents LIKE "%/' . $id . '/%" OR id=:id', array(':id'=>$id));
         $this->redirect(array('index'));
 
     }

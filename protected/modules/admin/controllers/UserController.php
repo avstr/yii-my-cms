@@ -27,7 +27,7 @@ class UserController extends Controller
     public function accessRules()
     {
         return array(
-            array('allow',  // allow all users to perform 'index' and 'view' actions
+            array('allow',  // allow all users to perform actions
                 'actions'=>array('index', 'create', 'update', 'delete', 'view', 'password'),
                 'roles'=>array('admin'),
             ),
@@ -40,7 +40,7 @@ class UserController extends Controller
     public function actionPassword($id)
     {
         $model=$this->loadModel($id);
-
+        $model->scenario = "password";
 
         if(isset($_POST['password']))
         {
@@ -72,7 +72,7 @@ class UserController extends Controller
 	public function actionCreate()
 	{
 		$model=new User;
-
+        $model->scenario = "create";
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
@@ -95,8 +95,8 @@ class UserController extends Controller
 	 */
 	public function actionUpdate($id)
 	{
-		$model=$this->loadModel($id);
-
+        $model=$this->loadModel($id);
+        $model->scenario = "update";
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
