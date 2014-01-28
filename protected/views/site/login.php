@@ -22,7 +22,7 @@ $this->breadcrumbs=array(
 	),
 )); ?>
 
-	<p class="note">Fields with <span class="required">*</span> are required.</p>
+	<p class="note">Поля с <span class="required">*</span> должны быть заполнены.</p>
 
 	<div class="row">
 		<?php echo $form->labelEx($model,'login'); ?>
@@ -51,3 +51,4 @@ $this->breadcrumbs=array(
 
 <?php $this->endWidget(); ?>
 </div><!-- form -->
+<a href='<?php echo Yii::app()->createUrl("site/recoverpass");?>'>Забыли пароль?</a>

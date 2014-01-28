@@ -196,7 +196,7 @@ class SiteController extends Controller
     }
 
     public function actionPassword($id, $secure_code){
-        $result = '';
+        $errors = array();
         $model = User::model()->findByPk($id);
         $model->scenario = "password";
         if($model == null){
@@ -204,16 +204,15 @@ class SiteController extends Controller
         }
         $model->password = '';
         if($model->id == $id && $model->secure_code == $secure_code){
-            if(isset($_POST['User'])){
-
+            if(time() > strtotime($model->time_secure_code)){
+                $errors['time_secure_code'] = "Out of time secure code";
+            }elseif(isset($_POST['User'])){
                 $model->password=$_POST['User']['password'];
                 $model->password_repeat=$_POST['User']['password_repeat'];
                 $model->secure_code = '';
                 $model->time_secure_code = '';
-                echo "<pre>"; print_r($model); echo "</pre>";
                 if($model->save()){
-                    header((is_set($_POST['referer']))? $_POST['referer'] : Yii::app()->createUrl('site/index'));
-                    exit;
+                    $this->redirect(Yii::app()->homeUrl);
                 }
             }
         }else{
@@ -222,6 +221,7 @@ class SiteController extends Controller
 
         $this->render('password', array(
             'model' => $model,
+            'errors' => $errors,
         ));
 
     }

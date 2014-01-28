@@ -41,7 +41,7 @@ class User extends CActiveRecord
 		return array(
 			array('name, surname, login, password, email', 'required'),
             array('role', 'required', 'on' => 'create, update'),
-            array('login, email', 'unique'),
+            array('login, email', 'unique', 'on' => 'create, registration'),
             array('email','email'),
 			array('name, secondname, surname, login, password, email', 'length', 'max'=>255),
 			array('role', 'length', 'max'=>5),
