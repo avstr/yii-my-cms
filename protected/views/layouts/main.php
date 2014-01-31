@@ -46,6 +46,7 @@ Yii::app()->getClientScript()->registerPackage('sociallikes');
         <?php
         $this->widget('zii.widgets.CMenu', array(
             'items'=>array_merge(Page::menu("front"), array(
+                array('label'=>'Регистрация', 'url'=>array('/site/registration'), 'visible'=>Yii::app()->user->isGuest),
                 array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
                 array('label'=>'Logout', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
             )),

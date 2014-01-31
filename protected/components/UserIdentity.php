@@ -34,4 +34,9 @@ class UserIdentity extends CUserIdentity {
     public function getId(){
         return $this->_id;
     }
+
+    public function fakeAuth($id){
+        $this->_id = $id;
+        $this->errorCode = self::ERROR_NONE;
+    }
 }

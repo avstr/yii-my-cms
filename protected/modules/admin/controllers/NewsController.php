@@ -73,12 +73,11 @@ class NewsController extends Controller
             }
             //Если поле загрузки файла не было пустым, то
             if ($model->image){
-                //сохранить файл на сервере в каталог images/2011 под именем
-                //month-day-alias.jpg
+                //сохранить файл на сервере в каталог images/news/Год под именем
+                //id.jpg
                 $sourcePath = pathinfo($model->image->getName());
                 $fileName = $model->id.'.'.$sourcePath['extension'];
                 $model->picture = $fileName;
-                echo "<pre>"; print_r($model); echo "</pre>";
                 if(!$model->save()){
                     $this->render('update',array(
                         'model'=>$model,

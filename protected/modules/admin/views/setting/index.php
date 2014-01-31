@@ -48,6 +48,30 @@
     </div>
 
     <div class="row">
+        <?php echo $form->labelEx($model,'widthServicePicture'); ?>
+        <?php echo $form->textField($model,'widthServicePicture'); ?>
+        <?php echo $form->error($model,'widthServicePicture'); ?>
+    </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($model,'heightServicePicture'); ?>
+        <?php echo $form->textField($model,'heightServicePicture'); ?>
+        <?php echo $form->error($model,'heightServicePicture'); ?>
+    </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($model,'widthSmallServicePicture'); ?>
+        <?php echo $form->textField($model,'widthSmallServicePicture'); ?>
+        <?php echo $form->error($model,'widthSmallServicePicture'); ?>
+    </div>
+
+    <div class="row">
+        <?php echo $form->labelEx($model,'heightSmallServicePicture'); ?>
+        <?php echo $form->textField($model,'heightSmallServicePicture'); ?>
+        <?php echo $form->error($model,'heightSmallServicePicture'); ?>
+    </div>
+
+    <div class="row">
         <?php echo $form->labelEx($model,'hiddenNewResponse'); ?>
         <?php echo $form->checkBox($model,'hiddenNewResponse', array("uncheckedValue"=>"no", "checkedValue"=>"yes", "value"=>"yes")); ?>
         <?php echo $form->error($model,'hiddenNewResponse'); ?>

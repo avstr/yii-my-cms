@@ -31,7 +31,7 @@ class Setting extends CActiveRecord
             array('email', 'email'),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, sizeSideNewsPicture, sizeSideSmallNewsPicture, hiddenNewResponse, email', 'safe'),
+			array('id, sizeSideNewsPicture, sizeSideSmallNewsPicture, hiddenNewResponse, widthServicePicture, heightServicePicture, widthSmallServicePicture, heightSmallServicePicture, email', 'safe'),
 		);
 	}
 
@@ -55,6 +55,10 @@ class Setting extends CActiveRecord
 			'id' => 'ID',
 			'sizeSideNewsPicture' => 'Размер стороны картинки для новостей, рх',
 			'sizeSideSmallNewsPicture' => 'Размер стороны маленькой картинки для новостей, рх',
+            'widthServicePicture' => 'Ширина картинки для услуги, рх',
+            'heightServicePicture' => 'Высота картинки для услуги, рх',
+            'widthSmallServicePicture' => 'Ширина превью картинки для услуги, рх',
+            'heightSmallServicePicture' => 'Высота превью картинки для услуги, рх',
             'hiddenNewResponse' => 'Скрыть отзыв при добавлении отзыва пользователем',
             'email' => 'Email сайта'
 		);

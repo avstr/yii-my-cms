@@ -7,9 +7,11 @@ div.form #Page_type label{
 .row_label{
      width: 200px;
      float: left;
+     padding: 5px;
  }
 .row_content{
     float: left;
+    padding: 5px;
 }
 .row{
     clear: both;

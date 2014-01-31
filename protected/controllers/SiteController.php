@@ -125,8 +125,16 @@ class SiteController extends Controller
             if($model->id == $id && $model->secure_code == $secure_code){
                 $model->secure_code = '';
                 $model->status = 'verify';
-                $model->save(false);
-                $result = 'verify';
+                if($model->save(false)){
+                    $identity = new UserIdentity(null, null);
+                    $identity->fakeAuth($user->user_id);
+                    Yii::app()->user->login($identity);
+                    $this->redirect('/user/update');
+                }else{
+                    $result = "error_save";
+                }
+
+
             }else{
                 $result = 'error_id_secure_code';
             }

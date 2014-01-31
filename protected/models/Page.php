@@ -144,8 +144,8 @@ class Page extends CActiveRecord
 
     /** Возвращает меню страниц
      *
-     * @param active page id
      * @param mode {admin, front}
+     * @param active page id
      *@return Array pages
      */
     public static function menu($mode = "admin", $active_id = 0){
@@ -260,7 +260,7 @@ class Page extends CActiveRecord
         //в зависимости от типа страницы оставляем или URL или content
        // echo "<pre>"; print_r($this); echo "</pre>";
         switch($this->type){
-            case 'sratic':
+            case 'static':
                 $this->URL = "";
                 break;
             case 'URL':
